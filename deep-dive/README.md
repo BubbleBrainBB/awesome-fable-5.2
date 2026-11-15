@@ -1,205 +1,157 @@
-# Deep Dive —— 第一人称深潜短片（纯代码）
+# Deep Dive: a first-person dive film, computed entirely by code
 
-一支 78 秒的第一人称（POV）潜水短片：镜头就是潜水员的眼睛。从水面下仰望斯涅尔之窗开始，沿沙沟游过浅礁，
-越过礁缘翻下峭壁，在二十多米深处打开手电，最后转向深蓝，看一只蝠鲼从头顶的阳光里滑过。
+English | [中文](README.zh-CN.md)
+
+A 78-second first-person (POV) dive film: the camera is the diver's eyes. It starts just under the surface looking up at Snell's window, follows a sand channel across a shallow reef, drops over the reef edge and down a wall, switches on a dive torch at a little over twenty metres, and finally turns to the open blue to watch a manta ray glide across the sun overhead.
 
 [![Deep Dive](preview.jpg)](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/deep-dive-v1.0/deep_dive.mp4)
 
-- 成片：[`deep_dive.mp4`](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/deep-dive-v1.0/deep_dive.mp4)（1920×1080，30 fps，78 s，H.264 High / yuv420p + AAC 立体声，faststart）。
-  文件有 129 MB，超过 GitHub 单文件上限，所以不在仓库里，放在 Release 附件中；按下面「重新生成」跑一遍也会在本目录得到它。
-- 封面：`preview.jpg`（成片第 2085 帧）
-- 联系表：[`contact_sheet.jpg`](contact_sheet.jpg)（全片每秒一帧，共 78 格）
-- 质检报告：[`qc_report.txt`](qc_report.txt)，音轨频谱图：[`audio_spectrogram.png`](audio_spectrogram.png)
+- Film: [`deep_dive.mp4`](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/deep-dive-v1.0/deep_dive.mp4) (1920×1080, 30 fps, 78 s, H.264 High / yuv420p + AAC stereo, faststart). The file is 129 MB, above GitHub's per-file limit, so it is not in the repository; it is attached to a release. Running the steps under "Rendering it yourself" also produces it in this directory.
+- Cover: `preview.jpg` (frame 2085 of the film)
+- Contact sheet: [`contact_sheet.jpg`](contact_sheet.jpg) (one frame per second, 78 cells)
+- QC report: [`qc_report.txt`](qc_report.txt); soundtrack spectrogram: [`audio_spectrogram.png`](audio_spectrogram.png)
 
-代码由 Claude（`claude-fable-5-2`）编写，画面和声音由这些代码计算得出。
+The code was written by Claude, an AI model (`claude-fable-5-2`); the picture and the sound were computed by that code.
 
-画面、运动、声音全部由本目录里的代码算出来：没有用 AI 生图/生视频模型，没有照片、视频、模型、贴图、
-音效或音乐素材，没有用 Blender、游戏引擎或现成渲染器，也没有用任何视频类 skill。只用了 clang++、
-系统自带的 Metal（自己写的计算着色器）、Python（numpy / scipy / Pillow），ffmpeg 只负责编码封装。
+Picture, motion and sound all come from the code in this directory. No image or video generation model, no photos, footage, 3D models, textures, sound effects or music assets, no Blender, game engine or off-the-shelf renderer, and no video-making agent skill were used. The tools are clang++, the Metal framework that ships with macOS (running a compute shader written for this film), Python (numpy, scipy, Pillow), and ffmpeg for encoding and muxing only.
 
-## 分镜与路线
+## Storyboard and route
 
-世界坐标：y 向上，水面在 y = 0；礁坪在 x < 0，礁缘在 x ≈ 0，峭壁朝 +x（外海）一侧直落。太阳在外海方向，
-高度角 47°（折射进水里后约偏离天顶 30°）。
+World coordinates: y is up and the surface is at y = 0. The reef flat is at x < 0, the reef edge at x ≈ 0, and the wall drops straight down on the +x (open sea) side. The sun is out to sea at an elevation of 47° (about 30° from the zenith after refraction into the water).
 
-| 时间 | 段落 | 深度 | 看到什么 |
+| Time | Section | Depth | What you see |
 | --- | --- | --- | --- |
-| 0–6 s | 入水 | 1.6 m | 仰头：头顶是晃动的水面，天空被折射压进一个圆窗（斯涅尔之窗），窗外是全反射，映着礁石；入水的气泡正在上浮 |
-| 6–13 s | 低头下潜 | 2–5 m | 视线从水面落到前方：光柱斜穿下来，沙沟和礁坪上是流动的焦散光网 |
-| 13–26 s | 沿沙沟前进 | 6–7 m | 两侧是桌面珊瑚、分枝珊瑚、团块珊瑚；一群梅鲷（黄带、蓝背）从左前方横穿而过，绕开潜水员 |
-| 26–35 s | 礁顶 | 4–6 m | 升上礁顶，珊瑚头上方悬停着一团团橙色的花鮨；礁缘外开始露出深蓝 |
-| 35–44 s | 越过礁缘 | 4→11 m | 脚下的礁石退去；右转，贴着峭壁俯视下潜，海鞭和海扇从壁上伸出来 |
-| 44–60 s | 峭壁 | 11→21 m | 水色由青绿变成深蓝，红色消失，海扇只剩黑色剪影；45.6 s 打开手电，光斑扫到的海扇和海绵恢复红橙本色，光束里的悬浮颗粒发亮 |
-| 60–66 s | 转向深蓝 | 22 m | 离开峭壁向外看，只有蓝；远处鱼群，一个影子从雾里出现 |
-| 66–75 s | 蝠鲼 | 22 m | 蝠鲼迎面游来，从头顶掠过太阳；视线跟着它仰起，头顶二十多米外是遥远的水面和放射状的光；自己的气泡向上升去 |
-| 75–78 s | 结尾 | 22 m | 蝠鲼沿着峭壁向上游远，淡出 |
+| 0–6 s | Entry | 1.6 m | Looking up: the moving surface overhead, with the sky squeezed into a circular window (Snell's window). Outside the window is total internal reflection, mirroring the reef. Bubbles from the entry are rising. |
+| 6–13 s | Looking down, descending | 2–5 m | The gaze drops from the surface to the way ahead. Light shafts slant down, and a moving net of caustics covers the sand channel and the reef flat. |
+| 13–26 s | Along the sand channel | 6–7 m | Table corals, branching corals and boulder corals on both sides. A school of fusiliers (yellow stripe, blue back) crosses from the front left and parts around the diver. |
+| 26–35 s | Reef top | 4–6 m | Up onto the reef top, where clouds of orange anthias hover above the coral heads. Deep blue starts to show beyond the edge. |
+| 35–44 s | Over the edge | 4→11 m | The reef falls away underfoot. A right turn, then a descent along the wall looking down, with sea whips and sea fans reaching out from it. |
+| 44–60 s | The wall | 11→21 m | The water goes from blue-green to deep blue, red disappears, and the sea fans become black silhouettes. At 45.6 s the torch comes on: fans and sponges in its spot get their red and orange back, and particles in the beam light up. |
+| 60–66 s | Turning to the blue | 22 m | Looking away from the wall there is only blue, a distant school of fish, and a shape appearing out of the haze. |
+| 66–75 s | Manta | 22 m | The manta swims towards the diver and passes across the sun overhead. The gaze follows it upwards: the surface is more than twenty metres away, with light radiating from it. The diver's own bubbles rise. |
+| 75–78 s | Ending | 22 m | The manta swims away up the wall. Fade out. |
 
-呼吸贯穿全片：约 6 秒一次（吸气约 1.9 s，呼气约 2.8 s，每次略有不同），吸气时身体微微上浮、呼气时下沉；呼气的气泡从画面
-下方两侧升起（平游时大多在视野外，低头和仰头时能看到）。
+Breathing runs through the whole film: one breath roughly every 6 seconds (about 1.9 s in, 2.8 s out, each slightly different). The body rises a little on the inhale and sinks on the exhale. Exhaled bubbles rise from both sides of the bottom of the frame; in level swimming most of them are out of view, and they are visible when looking down or up.
 
-## 技术方案
+## How it was made
 
-### 渲染：自己写的 Metal 光线步进器
+### Rendering: a Metal ray marcher written for this film
 
-`src/render.metal` 是一个计算着色器，每个采样做一次完整的"水下相机"计算；`src/main.mm` 是宿主程序，
-负责场景、模拟、每帧的水面与焦散、调度 GPU、后期和写 PNG。几何全部是有符号距离场（SDF），没有网格、没有贴图文件。
+`src/render.metal` is a compute shader that does a complete "underwater camera" calculation for every sample. `src/main.mm` is the host program: it handles the scene, the simulation, the water surface and caustics for each frame, GPU dispatch, post-processing and PNG output. All geometry is signed distance fields (SDF). There are no meshes and no texture files.
 
-**水下的光（成败所在）**
+**Underwater light (the part that decides whether it works)**
 
-- **水面**：`src/water.h` 用自己写的 FFT 把一个随机波谱（色散关系 ω = √(gk)，沿风向传播）合成为 1024² 的
-  周期高度场（25.6 m 一块），每个子帧重新计算，所以水面是真的在走的波。
-- **焦散与光柱同源**：每个子帧把约 420 万条太阳光线按斯涅尔定律折射穿过这张水面，正向"泼"到 36 层水平
-  切片上（0.35 m 到 66 m 深，沿平均折射方向剪切），得到一个三维的"聚焦后阳光"光场。沙地、珊瑚、鱼、蝠鲼、
-  悬浮颗粒都从这里读取阳光；视线上的体积散射也沿途查询同一个光场，所以水里的光柱和海底的光网是对得上的，
-  随时间的流动也来自同一张波面。太阳的角直径和水的前向散射按深度把光场模糊，深处的焦散自然变软。
-- **水体**：按 RGB 分别吸收和散射（光束衰减系数：红光每米约衰减 28%，绿约 9%，蓝约 7%），远处的东西融进蓝雾，越深越蓝，
-  红色最先消失。太阳的单次散射沿视线步进（48 步，按透射率重要性采样），用前向很强的双 Henyey–Greenstein
-  相函数，所以朝着太阳看光柱最明显；多次散射是一个随深度衰减、向上更亮的解析项。
-- **从水下看水面**：视线到达水面时用波面的法线求折射——折射出去看到天空和太阳，超过临界角 48.6° 就是
-  全反射，此时再追一条反射光线去看礁石（所以窗外的水面映着礁盘）。窗口的形状是物理算出来的，不是画的。
-- **手电**：一个带柔边的聚光灯跟着视线（有滞后和手抖），照亮表面、悬浮颗粒，并有很弱的体积光束；
-  它的光没有被二十米的水滤过，所以照到的地方红色回来了。
-- **曝光**：先用低分辨率预跑一遍，统计每帧的平均亮度，像相机的自动曝光那样缓慢、不完全地补偿
-  （`auto_exposure.py`），所以深处比浅处暗，但仍然看得清。
+- **Surface.** `src/water.h` uses its own FFT to turn a random wave spectrum (dispersion relation ω = √(gk), travelling downwind) into a periodic 1024² height field covering 25.6 m. It is recomputed for every sub-frame, so the surface is made of waves that really travel.
+- **Caustics and light shafts from one source.** For every sub-frame about 4.2 million sun rays are refracted through that surface by Snell's law and splatted forward onto 36 horizontal slices (0.35 m to 66 m deep, sheared along the mean refracted direction). The result is a 3D field of focused sunlight. Sand, coral, fish, the manta and suspended particles all read their sunlight from it, and volume scattering along the view ray queries the same field. So the shafts in the water line up with the light net on the bottom, and both move because the same wave surface moves. The sun's angular size and the water's forward scattering blur the field with depth, so deep caustics soften naturally.
+- **Water.** Absorption and scattering are computed per RGB channel (beam attenuation: red loses about 28% per metre, green about 9%, blue about 7%). Distant things dissolve into blue haze, deeper is bluer, and red goes first. Single scattering of sunlight is marched along the view ray (48 steps, importance-sampled by transmittance) with a strongly forward dual Henyey–Greenstein phase function, so shafts are clearest looking towards the sun. Multiple scattering is an analytic term that falls off with depth and is brighter upwards.
+- **The surface from below.** Where a view ray reaches the surface, it is refracted using the wave normal. Refracted rays see the sky and the sun. Past the critical angle of 48.6° there is total internal reflection, and a reflected ray is traced to the reef (which is why the surface outside the window mirrors the reef). The shape of the window is computed from the physics, not drawn.
+- **Torch.** A soft-edged spotlight follows the gaze with lag and hand shake. It lights surfaces and suspended particles and has a very faint volumetric beam. Its light has not been filtered by twenty metres of water, so red returns where it lands.
+- **Exposure.** A low-resolution pre-pass measures the mean brightness of each frame, and `auto_exposure.py` compensates slowly and only partly, like a camera's auto-exposure. Deep water is darker than shallow water but still readable.
 
-**场景与生物（全部程序化）**
+**Scene and animals (all procedural)**
 
-- **礁盘**（`src/shared.h`，同一份代码既给着色器也给 CPU 用）：礁坪 + 沙沟 + 礁缘 + 峭壁的基础形状，
-  叠加用整数哈希计算的 Perlin / Worley 噪声做的珊瑚头、疙瘩和指状小突起；每个"细胞"是一个群体，有自己的颜色。
-- **珊瑚与海绵**（约 1700 个实例，放在一张三维网格里供光线查找）：桌面珊瑚、分枝珊瑚（折叠空间的分形）、
-  海扇（二维分形树）、海鞭、桶状海绵、团块珊瑚。海扇、海鞭随涌浪弯曲。
-- **涌浪**：一个统一的往复水流函数，软体、悬浮颗粒、鱼、气泡和潜水员本人都按同一相位被它带着晃，
-  这是"水下的东西一起动"的来源。
-- **梅鲷群**（280 条）：群体行为模拟——分离、对齐、聚集，沿一条随时间移动的"锚点"成流线形队伍，
-  避开礁石、潜水员和蝠鲼；身体按游速摆尾，转弯时身体弯曲，银色的体侧反射环境光。
-- **花鮨**（约 630 条，46 团）：各自在珊瑚头上方的小空间里悬停、顶流、不时窜动；潜水员靠近时缩回珊瑚。
-- **蝠鲼**：SDF 建模（菱形体盘、头鳍、尾、背鳍、腹面的鳃裂和斑点），翼沿圆弧卷曲拍动（保持翼长），
-  翼尖相位滞后；路径是带侧倾的样条。
-- **气泡**：粒子模拟（按半径决定上浮速度、螺旋晃动、大泡扁成帽状并抖动），呼气节奏来自呼吸时间线；
-  渲染时边缘按全反射变成镜面亮环，中间透明。
-- **海雪**：空间哈希的悬浮颗粒，有视差，被阳光（含焦散）和手电照亮。
+- **Reef** (`src/shared.h`, one piece of code used by both the shader and the CPU): a base shape of reef flat, sand channel, reef edge and wall, with coral heads, knobs and finger-like bumps added from Perlin and Worley noise computed with integer hashes. Each Worley cell is a colony with its own colour.
+- **Corals and sponges** (about 1,700 instances in a 3D grid for ray lookup): table corals, branching corals (a folded-space fractal), sea fans (a 2D fractal tree), sea whips, barrel sponges and boulder corals. Sea fans and sea whips bend with the surge.
+- **Surge.** One back-and-forth current function. Soft bodies, particles, fish, bubbles and the diver are all pushed by it in the same phase, which is why things underwater move together.
+- **Fusilier school** (280 fish): a flocking simulation with separation, alignment and cohesion. The school follows a moving anchor in a streamlined formation and avoids the reef, the diver and the manta. Tail beat follows swimming speed, bodies bend in turns, and the silver flanks reflect the surroundings.
+- **Anthias** (about 630 fish in 46 clouds): each hovers in a small space above its coral head, faces the current and darts now and then. They pull back into the coral when the diver comes close.
+- **Manta.** Modelled as an SDF (diamond-shaped disc, cephalic fins, tail, dorsal fin, gill slits and spots on the belly). The wings curl along a circular arc as they beat, which keeps their length, and the wing tips lag in phase. The path is a banked spline.
+- **Bubbles.** A particle simulation (rise speed depends on radius, with a spiral wobble; large bubbles flatten into caps and wobble). The exhale rhythm comes from the breathing timeline. When rendered, the rim becomes a bright mirror ring through total internal reflection and the centre is transparent.
+- **Marine snow.** Suspended particles from a spatial hash, with parallax, lit by the sun (including caustics) and by the torch.
 
-**第一人称镜头**（`src/sim.h`）
+**First-person camera** (`src/sim.h`)
 
-关键帧样条给出路线和视线；在此之上叠加：头部转动的二阶滞后（视线有惯性）、呼吸带来的浮沉（肺容积驱动
-一个阻尼弹簧）、踢蹼的左右摆和滚转（随游速变化）、低频的头部漂移、涌浪的推动；蝠鲼出现后视线锁定它。
-镜头是 104° 的广角，带一点桶形畸变和很轻的面镜暗角。
+A keyframe spline gives the route and the gaze. On top of that: second-order lag on head turns (the gaze has inertia), rise and fall from breathing (lung volume drives a damped spring), side-to-side sway and roll from fin kicks (scaled by swimming speed), slow head drift, and the push of the surge. Once the manta appears, the gaze locks onto it. The lens is a 104° wide angle with slight barrel distortion and a very light mask vignette.
 
-**时间一致性**
+**Temporal consistency**
 
-- 每帧 4 个子帧 × 6 采样 = 24 采样，180° 快门；每个子帧有自己的波面、焦散光场和模拟状态；
-  相机、鱼、气泡在子帧内部还按速度做连续的逐采样运动，所以运动模糊是连续的而不是四重影。
-- 除了像素抖动和体积步进的抖动，没有随机光线，画面本身没有蒙特卡洛噪点；最后加了很轻的胶片颗粒和抖动，
-  避免蓝色渐变在 8 位编码里出现条带。
-- 所有随机数种子固定：同样的命令得到同样的片子。
+- Each frame is 4 sub-frames × 6 samples = 24 samples with a 180° shutter. Every sub-frame has its own wave surface, caustic field and simulation state. Inside a sub-frame the camera, fish and bubbles also move continuously per sample according to their velocities, so motion blur is continuous instead of four ghost images.
+- Apart from pixel jitter and jittered volume steps there are no random rays, so the picture has no Monte Carlo noise. A very light film grain and dither are added at the end so that blue gradients do not band in 8-bit encoding.
+- All random seeds are fixed: the same command gives the same film.
 
-### 声音：`audio.py`（numpy / scipy 合成）
+### Sound: `audio.py` (synthesised with numpy and scipy)
 
-和画面共用同一条呼吸时间线（`work/frames/timeline.txt`）和相机深度曲线：
+The soundtrack shares the breathing timeline (`work/frames/timeline.txt`) and the camera depth curve with the picture.
 
-- 水下底噪（低频隆隆声 + 中频水声，随深度变暗）、与画面同一函数的涌浪冲刷声、开头水面的拍击声；
-- 调节器：吸气是带软管共鸣的气流嘶声，开阀有一下轻响；呼气是排气阀的咕噜声加一群气泡——每个气泡按
-  Minnaert 共振频率（与半径成反比，随水压升高）发出一个衰减的小音；
-- 礁石的噼啪声（鼓虾），浅礁密、深处稀；
-- 深蓝段远处的鲸类叫声（滑音 + 长混响）；
-- 极克制的铺底和声（几个长音，没有节奏）；手电开关的一声轻响。
+- An underwater bed (low rumble plus mid-frequency water noise, darker with depth), surge wash driven by the same function as the picture, and surface slap at the start.
+- Regulator: the inhale is an airflow hiss with hose resonance and a soft click as the valve opens. The exhale is the gurgle of the exhaust valve plus a cluster of bubbles, each one a short decaying tone at its Minnaert resonance frequency (inversely proportional to radius, rising with water pressure).
+- Reef crackle (snapping shrimp), dense on the shallow reef and sparse at depth.
+- Distant whale-like calls in the blue-water section (glides with long reverb).
+- A very restrained pad (a few long notes, no rhythm), and a soft click for the torch switch.
 
-各层按"实际发声时的电平"混音，调节器是最响的一层（潜水员听到的就是这样）。
+The layers are mixed by their level while actually sounding. The regulator is the loudest layer, as it is for a diver.
 
-### 文件
+### Files
 
-| 文件 | 内容 |
+| File | Contents |
 | --- | --- |
-| `make.sh` | 一条命令重新生成全片（渲染 → 音轨 → 质检 → 编码 → 校验） |
-| `render.sh` / `build.sh` | 编译与渲染（可断点续渲：已存在的帧会跳过） |
-| `src/main.mm` | 宿主：Metal 调度、屏幕分块索引、后期（眩光、色调曲线、暗角、颗粒）、PNG |
-| `src/render.metal` | 计算着色器：光线步进、材质、水体、水面、鱼、蝠鲼、气泡、海雪 |
-| `src/shared.h` | CPU 与 GPU 共用：地形 SDF、噪声、涌浪、焦散切片布局 |
-| `src/water.h` | FFT 波面、正向焦散光场 |
-| `src/world.h` | 珊瑚实例的摆放与网格 |
-| `src/sim.h` | 相机/潜水员、鱼群、蝠鲼、气泡的模拟 |
-| `src/base.h` | 向量、哈希、并行、FFT、PNG 编码 |
-| `auto_exposure.py` | 由预跑的亮度统计生成曝光曲线 |
-| `audio.py` / `audio_check.py` | 音轨合成 / 频谱与呼吸对齐检查 |
-| `qc.py` / `verify.sh` / `sheet.py` | 逐帧质检与联系表 / 成片校验 / 调试用联系表 |
+| `make.sh` | One command to regenerate the whole film (render → soundtrack → QC → encode → verify) |
+| `render.sh` / `build.sh` | Build and render (resumable: frames that already exist are skipped) |
+| `src/main.mm` | Host: Metal dispatch, screen-tile binning, post-processing (glare, tone curve, vignette, grain), PNG |
+| `src/render.metal` | Compute shader: ray marching, materials, water volume, surface, fish, manta, bubbles, marine snow |
+| `src/shared.h` | Shared by CPU and GPU: terrain SDF, noise, surge, caustic slice layout |
+| `src/water.h` | FFT wave surface, forward-traced caustic light field |
+| `src/world.h` | Placement of coral instances and the lookup grid |
+| `src/sim.h` | Simulation of the camera/diver, fish schools, manta and bubbles |
+| `src/base.h` | Vectors, hashing, parallel loops, FFT, PNG encoder |
+| `auto_exposure.py` | Builds the exposure curve from the pre-pass brightness statistics |
+| `audio.py` / `audio_check.py` | Soundtrack synthesis / spectrum and breath-alignment check |
+| `qc.py` / `verify.sh` / `sheet.py` | Per-frame QC and contact sheet / checks on the final file / debug contact sheet |
 
-## 重新生成
+## Rendering it yourself
 
 ```sh
 ./make.sh
 ```
 
-需要 macOS（Apple Silicon，Metal）、Xcode 命令行工具里的 clang++、Python 3（numpy、scipy、Pillow）、ffmpeg。
-中间文件写在 `work/`（帧约 5.5 GB），可以随时中断后重跑，已渲染的帧会被跳过。
+You need macOS on Apple Silicon (Metal), clang++ from the Xcode command line tools, Python 3 with numpy, scipy and Pillow, and ffmpeg. Intermediate files go to `work/` (about 5.5 GB of frames). The run can be interrupted and restarted at any time; frames already rendered are skipped.
 
-耗时（16 核 M4 Max）：这次实际的数字（渲染期间机器上还有别的会话在跑，空闲时会更快）：
+Time on a 16-core M4 Max. These are the actual numbers from this run; other jobs were using the machine during the render, so an idle machine will be faster.
 
-| 步骤 | 耗时 |
+| Step | Time |
 | --- | --- |
-| 低分辨率预跑（曝光统计，390 帧） | 36 秒 |
-| 正片 2340 帧（1920×1080，24 采样，4 子帧） | 76.6 分钟（平均 1.96 秒/帧；浅水段约 0.9 秒，峭壁段约 3 秒） |
-| 独立校验渲染 2340 帧（480×270） | 21 分钟 |
-| 音轨、质检、编码、校验 | 约 6 分钟 |
+| Low-resolution pre-pass (exposure statistics, 390 frames) | 36 s |
+| Final 2340 frames (1920×1080, 24 samples, 4 sub-frames) | 76.6 min (1.96 s per frame on average; about 0.9 s in the shallows, about 3 s on the wall) |
+| Independent check render, 2340 frames (480×270) | 21 min |
+| Soundtrack, QC, encode, verify | about 6 min |
 
-合计约 1 小时 45 分。交付的成片还多做了一步：质检发现一处问题后（见下），改了着色器并重渲了受影响的 771 帧
-（27 分钟 + 校验 10 分钟）；现在的源码已包含这个修改，从头跑 `./make.sh` 不需要这一步。
+About 1 hour 45 minutes in total. The delivered film took one extra step: after QC found a problem (see below), the shader was changed and the 771 affected frames were re-rendered (27 minutes, plus 10 minutes for the check render). The source here already includes that change, so a fresh `./make.sh` does not need the extra step.
 
-快速小样：`SIZE=960x540 SPP=8 ./render.sh`（先删掉 `work/frames`）。
+Quick look: `SIZE=960x540 SPP=8 ./render.sh` (delete `work/frames` first).
 
-## 质检结果
+## QC results
 
-`qc_report.txt` 是 `qc.py` 对最终帧的原始输出，`verify.sh` 的输出见下。都是我实际跑出来的结果。
+`qc_report.txt` is the raw output of `qc.py` on the final frames. The output of `verify.sh` is summarised below. All of these are results from actual runs.
 
-**逐帧（2340 帧 PNG）**
+**Per frame (2340 PNG frames)**
 
-- 2340 帧全部存在、可解码、1920×1080；渲染日志里 0 个 GPU 错误。渲染器在累加缓冲的 alpha 通道里记录每个像素
-  收到的采样数，只要有一个像素不满就拒绝写这一帧（本次没有触发）。
-- 每一帧都和一份**独立重渲**的低分辨率版本（另一次进程、480×270）按 32×18 个块比较平均值：最大块差的中位数
-  0.95 级（8 位），全片最大 10.07 级（第 1840 帧），低于 14 级的阈值——没有"无报错但局部缺块/损坏"的帧。
-- 没有黑帧（淡入淡出之外平均亮度最低 120.8）、没有黑块；过曝像素最多的一帧占 0.59%。
-- 闪烁检测（一个 480×360 的大区域相对前后两帧同时跳变）：全片最大 2.44 级，阈值 4，0 帧被标记。
-  同样的指标放到 60×60 的小块上会有 402 帧超过 9 级，我看过其中最高的几处（第 85–90、603–606、659–660 帧），
-  是贴近镜头的气泡和游过的鱼在一帧内穿过小块，属于画面内容而不是渲染闪烁，所以只作为信息列出。
-- **这一步抓到并修掉的真问题**：第一次全片渲染后，大区域闪烁检测标出第 1504 帧——一个贴着面镜的气泡只在一帧里
-  出现，成了左下角一下白闪（独立渲染里也有，说明是场景内容而不是坏帧）。修法：气泡在离镜头 7–14 cm 内渐隐；
-  用模拟扫描出有气泡近距离经过视野的 771 帧，重渲了这些帧的正片和校验版，再整片重新质检，结果如上。
-- 联系表 `contact_sheet.jpg`：每秒一帧共 78 格，我整张看过。
+- All 2340 frames exist, decode, and are 1920×1080. The render log has 0 GPU errors. The renderer stores the number of samples each pixel received in the alpha channel of the accumulation buffer and refuses to write a frame if any pixel is short. That did not trigger in this run.
+- Every frame was compared with an **independently re-rendered** low-resolution version (a separate process, 480×270) by the mean of 32×18 blocks. The median of the largest block difference is 0.95 levels (8-bit) and the maximum over the film is 10.07 levels (frame 1840), below the threshold of 14. So there are no frames that are silently damaged or missing a region.
+- No black frames (lowest mean brightness outside the fades is 120.8) and no black blocks. The frame with the most clipped pixels has 0.59%.
+- Flicker test (a large 480×360 region jumping relative to both the previous and the next frame): maximum 2.44 levels over the film against a threshold of 4, with 0 frames flagged. The same measure on small 60×60 blocks exceeds 9 levels on 402 frames. The highest of these were inspected (frames 85–90, 603–606, 659–660): they are bubbles close to the lens and fish crossing a small block within one frame. That is picture content, not render flicker, so it is listed for information only.
+- **A real problem this step caught, now fixed.** After the first full render the large-region flicker test flagged frame 1504: a bubble touching the mask appeared for a single frame as a white flash at the lower left. It was also in the independent render, so it was scene content and not a damaged frame. The fix: bubbles fade out within 7–14 cm of the lens. The simulation was scanned for frames with a bubble passing close to the view (771 frames), those frames were re-rendered in both the final and the check version, and the whole film went through QC again, with the results above.
+- The contact sheet `contact_sheet.jpg` (one frame per second, 78 cells) was looked at in full.
 
-**成片 `deep_dive.mp4`**
+**The final file `deep_dive.mp4`**
 
-- ffprobe：H.264 High，yuv420p，1920×1080，30 fps，2340 帧，78.000 s，视频约 13.0 Mbps；AAC-LC 48 kHz 立体声
-  约 263 kbps；文件 129 MB；`moov` 在 `mdat` 之前（faststart）。
-- 完整解码一遍：无错误，解出 2340 帧；blackdetect 只报了片尾淡出的 0.3 秒。
-- 压缩后抽帧检查了深蓝渐变区：颗粒大部分保留（纹理标准差 1.14 级，源帧 1.42 级），没有看到明显条带。
+- ffprobe: H.264 High, yuv420p, 1920×1080, 30 fps, 2340 frames, 78.000 s, video about 13.0 Mbps; AAC-LC 48 kHz stereo at about 263 kbps; 129 MB; `moov` before `mdat` (faststart).
+- A full decode ran without errors and produced 2340 frames. blackdetect reported only the 0.3 s fade at the end.
+- Frames extracted after compression were checked in the blue gradient areas: most of the grain survives (texture standard deviation 1.14 levels against 1.42 in the source frames) and no obvious banding was seen.
 
-**声音与同步（只做了波形/频谱层面的检查，没有人听过）**
+**Sound and sync (checked only as waveforms and spectra; nobody has listened to it)**
 
-- 我无法"听"这条音轨。能确认的只有数字：整体 RMS −21 dBFS，峰值 −6.9 dBFS；吸气窗口内 1.5–9 kHz 的嘶声比
-  呼吸间隙高约 17 dB，呼气窗口内 150–1400 Hz 的气泡声高约 13 dB；频谱图见 `audio_spectrogram.png`
-  （下方绿条是吸气、橙条是呼气）。
-- 音画同步：画面里"每帧新生的气泡数"（来自渲染日志）和成片音轨的气泡频带能量做互相关，峰值 0.56，
-  位于 0 帧延迟；画面的气泡只在呼气窗口内产生（每秒约 16 个，窗口外 0 个）。
-- 音色像不像真的调节器、鲸声和铺底好不好听，我没法验证，请以实际试听为准。
+- Claude cannot hear the soundtrack. Only numbers can be confirmed: overall RMS −21 dBFS, peak −6.9 dBFS. In the inhale windows the hiss band (1.5–9 kHz) is about 17 dB above the gaps between breaths, and in the exhale windows the bubble band (150–1400 Hz) is about 13 dB above them. The spectrogram is `audio_spectrogram.png` (green bars at the bottom are inhales, orange bars are exhales).
+- A/V sync: the number of bubbles born in each frame (from the render log) was cross-correlated with the bubble-band energy of the soundtrack in the final file. The peak is 0.56 at a lag of 0 frames. Bubbles in the picture are born only inside exhale windows (about 16 per second, and 0 outside them).
+- Whether the regulator sounds real, and whether the whale calls and the pad sound good, could not be verified. Listen for yourself.
 
-## 已知不足（如实说）
+## Known shortcomings
 
-- **我不能真正"看片"和"听片"**。运动是靠抽帧联系表、相邻帧对比和数值指标判断的：镜头晃动的幅度、
-  鱼群的节奏、蝠鲼拍翼是否自然，都没有经过连续播放的检验；音轨没有人听过。
-- **光**：太阳的单次散射、焦散、折射/全反射是算出来的；多次散射只是一个解析近似，水的光学系数是 RGB 三个数
-  而不是光谱。光柱不会被礁石和蝠鲼挡出阴影（体积里没有阴影）；表面的阴影是沿平均折射方向的距离场软阴影。
-  窗外水面里的礁石倒影用的是简化光照。没有云，太阳被处理成一团柔光，没有真实镜头的星芒和眩光鬼影。
-- **礁石和珊瑚**：全是距离场加噪声，近看偏圆润、偏糊，没有真实珊瑚的细孔和触手；一共只有六类造型
-  （桌面、分枝、海扇、海鞭、桶状海绵、团块），分枝珊瑚和海扇是对称分形，细看能看出规律；没有软珊瑚、海葵、
-  海百合这些。沙纹只是法线扰动，不是几何。
-- **鱼**：只有两种；没有胸鳍、腹鳍和鳞片；鱼群是 boids 加一条人为设计的行进路线，不会觅食、不会对手电有反应；
-  鱼和蝠鲼都不在海底投影。蝠鲼只有一只，拍翼是给定的弯曲函数而不是受力游动，腹面斑纹是程序生成的。
-- **气泡**：是椭球，不会分裂、合并；中间只是透明，没有透过气泡看到背景被折射缩小的效果；贴近镜头 7–14 cm
-  内会渐隐（为了去掉一帧的白闪）。
-- **第一人称**：画面里没有面镜边框、手、仪表、呼吸管和脚蹼，手电也没有实体，只有光；没有景深。
-  运动模糊是每帧 4 个子帧加子帧内的平移插值，相机的转动在子帧内没有插值。
-- **观感**：整体偏青蓝单色（不补光的水下确实如此，但真实相机的白平衡和色彩更丰富）；画面略软
-  （重建滤波 + 眩光 + 水雾）；60–64 秒转向深蓝的几秒钟画面比较空。
-- **可重现性**：种子固定，流程是确定性的，但我没有做"两次完整渲染逐字节相同"的验证；交付的成片里有 771 帧是
-  修正后重渲的（其余帧不受该修改影响，理由见质检一节，但同样没有逐字节验证）。
-- 这是一支"看起来像潜水录像"的程序化短片，离真实水下摄影的丰富程度还有明显差距：真实礁盘的生物密度、
-  形态和颜色的多样性远高于这里。
+- **Claude cannot actually watch or listen to the film.** Motion was judged from contact sheets, comparisons of neighbouring frames and numeric measures. The amount of camera sway, the rhythm of the school and whether the manta's wing beat looks natural have not been checked in continuous playback. Nobody has listened to the soundtrack.
+- **Light.** Single scattering of sunlight, caustics, and refraction and total internal reflection are computed. Multiple scattering is only an analytic approximation, and the water's optical coefficients are three RGB numbers, not a spectrum. Light shafts are not shadowed by the reef or the manta (the volume has no shadows). Shadows on surfaces are distance-field soft shadows along the mean refracted direction. The reef mirrored in the surface outside the window uses simplified lighting. There are no clouds, the sun is rendered as a soft glow, and there are no star bursts or lens ghosts as a real lens would give.
+- **Reef and corals.** Everything is distance fields plus noise. Up close it looks rounded and soft, without the pores and polyps of real coral. There are only six kinds of form (table, branching, sea fan, sea whip, barrel sponge, boulder). Branching corals and sea fans are symmetric fractals, and the regularity shows on a close look. There are no soft corals, anemones or feather stars. Sand ripples are a normal perturbation, not geometry.
+- **Fish.** Only two species, with no pectoral or pelvic fins and no scales. The school is boids plus a designed route: it does not feed and does not react to the torch. Neither the fish nor the manta casts a shadow on the bottom. There is only one manta, its wing beat is a prescribed bending function and not swimming driven by forces, and its belly markings are procedural.
+- **Bubbles.** They are ellipsoids that never split or merge. The centre is simply transparent, without the shrunken refracted background seen through a real bubble. They fade out within 7–14 cm of the lens (to remove the one-frame white flash).
+- **First person.** The frame has no mask edge, hands, gauges, snorkel or fins, and the torch has no body, only light. There is no depth of field. Motion blur is 4 sub-frames per frame plus translation interpolated inside each sub-frame; camera rotation is not interpolated inside a sub-frame.
+- **Look.** The film is close to a blue-cyan monochrome (true of unlit underwater footage, but a real camera's white balance and colour are richer). The picture is slightly soft (reconstruction filter, glare and haze). The few seconds turning to the blue at 60–64 s are rather empty.
+- **Reproducibility.** Seeds are fixed and the pipeline is deterministic, but two full renders were not compared byte for byte. In the delivered film 771 frames were re-rendered after the fix. The other frames are not affected by that change (for the reason given under QC), but that was not verified byte for byte either.
+- This is a procedural film that looks like dive footage. It is still clearly short of the richness of real underwater photography: a real reef has far more life, and far more variety in form and colour, than this one.
