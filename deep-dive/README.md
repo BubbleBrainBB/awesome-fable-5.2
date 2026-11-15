@@ -3,9 +3,9 @@
 一支 78 秒的第一人称（POV）潜水短片：镜头就是潜水员的眼睛。从水面下仰望斯涅尔之窗开始，沿沙沟游过浅礁，
 越过礁缘翻下峭壁，在二十多米深处打开手电，最后转向深蓝，看一只蝠鲼从头顶的阳光里滑过。
 
-[![Deep Dive](preview.jpg)](https://github.com/BubbleBrainBB/fable-5.2-works/releases/download/deep-dive-v1.0/deep_dive.mp4)
+[![Deep Dive](preview.jpg)](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/deep-dive-v1.0/deep_dive.mp4)
 
-- 成片：[`deep_dive.mp4`](https://github.com/BubbleBrainBB/fable-5.2-works/releases/download/deep-dive-v1.0/deep_dive.mp4)（1920×1080，30 fps，78 s，H.264 High / yuv420p + AAC 立体声，faststart）。
+- 成片：[`deep_dive.mp4`](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/deep-dive-v1.0/deep_dive.mp4)（1920×1080，30 fps，78 s，H.264 High / yuv420p + AAC 立体声，faststart）。
   文件有 129 MB，超过 GitHub 单文件上限，所以不在仓库里，放在 Release 附件中；按下面「重新生成」跑一遍也会在本目录得到它。
 - 封面：`preview.jpg`（成片第 2085 帧）
 - 联系表：[`contact_sheet.jpg`](contact_sheet.jpg)（全片每秒一帧，共 78 格）

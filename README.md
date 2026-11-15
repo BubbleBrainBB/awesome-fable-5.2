@@ -1,4 +1,4 @@
-# Fable 5.2 Works
+# Awesome Fable 5.2
 
 用纯代码做出来的画面和影片合集。每个作品的代码都由 Claude（模型 `claude-fable-5-2`）在 Claude Code 里编写，
 画面和声音由这些代码计算得出：没有用 AI 生图/生视频模型，没有照片、贴图、3D 模型或音效素材，
@@ -12,7 +12,7 @@ assets, and no off-the-shelf renderers were used.
 
 ### [Deep Dive · 深潜](deep-dive/)
 
-[![Deep Dive](deep-dive/preview.jpg)](https://github.com/BubbleBrainBB/fable-5.2-works/releases/download/deep-dive-v1.0/deep_dive.mp4)
+[![Deep Dive](deep-dive/preview.jpg)](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/deep-dive-v1.0/deep_dive.mp4)
 
 78 秒的第一人称潜水短片（1920×1080，30 fps，带合成音轨）：从水面下仰望斯涅尔之窗，游过浅礁，翻下峭壁，
 在深蓝里遇到一只蝠鲼。自写的无头 Metal 计算着色器光线步进渲染器，FFT 波面和正向追踪的焦散光场，
@@ -21,7 +21,7 @@ assets, and no off-the-shelf renderers were used.
 A 78-second first-person dive (1080p, 30 fps, synthesised soundtrack). A self-written headless Metal compute
 ray marcher, FFT waves with a forward-traced caustic light field, boids, and audio synthesised with numpy/scipy.
 
-- 成片 · Film：[deep_dive.mp4](https://github.com/BubbleBrainBB/fable-5.2-works/releases/download/deep-dive-v1.0/deep_dive.mp4)（129 MB，Release 附件）
+- 成片 · Film：[deep_dive.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/deep-dive-v1.0/deep_dive.mp4)（129 MB，Release 附件）
 - 说明、质检结果和已知不足 · Details：[deep-dive/README.md](deep-dive/README.md)（中文）
 - 需要 · Requires：macOS + Apple GPU（Metal）、clang++、Python 3（numpy / scipy / Pillow）、ffmpeg
 
