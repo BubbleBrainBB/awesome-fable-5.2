@@ -1,0 +1,10 @@
+frames expected 2340, readable at 1920x1080: 2340
+mean luma (0-255): min 120.8 at frame 1708, max 170.3 at frame 50
+largest clipped-white fraction in the body: 0.59% ; largest black fraction: 0.00%
+independent check frames available: 2340
+max block difference vs check render (8-bit levels): median 0.95, 99th pct 4.55, max 10.07 at frame 1840; mean abs diff median 0.11; flag threshold 14.0
+temporal spike score, large areas (8-bit levels): median -0.01, 99.9th pct 1.57, max 2.44 at frame 774; flag threshold 4.0
+(for information, not flagged) the same score on small 60x60 px blocks: median 3.53, max 99.25 at frame 87; 402 frames above 9 - these are near-lens bubbles and passing fish crossing a block within one frame
+largest frame-to-frame change of mean luma: 9.06 at frame 9
+contact sheet: contact_sheet.jpg (78 frames, one per second)
+FLAGGED: 0
