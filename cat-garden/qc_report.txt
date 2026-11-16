@@ -1,0 +1,8 @@
+frames decoded: 3300 (110.000 s at 30 fps)
+black frames outside the fade-in and the eyelid windows: 0 []
+frozen frames (identical to the previous one): 0 []
+lost-tile candidates (block dark for one frame, neighbours bright and equal): 22 [(139, 2), (140, 3), (141, 2), (144, 1), (151, 1), (853, 1), (877, 2), (1048, 1), (1049, 1), (1077, 1), (1104, 3), (1105, 3), (1317, 1), (1338, 2), (1339, 2), (1341, 2), (1342, 2), (2558, 1), (2895, 1), (2988, 1)]
+single-frame outlier score (informational): 543 frames > 14; top: ['169:131', '880:98', '1105:97', '1104:96', '150:91', '172:91', '146:87', '877:86']
+largest frame-to-frame mean change: 67.2 at frame 903
+independent re-render: 330 frames compared, worst block difference 19.4/255 (frame 90), median 9.1; flagged (> 18): 1 [(90, 19.42082977294922)]
+segments holding candidates to inspect by eye (a candidate is not a verdict; see README section 6): [1, 2, 14, 17, 18, 21, 22, 42, 48, 49]

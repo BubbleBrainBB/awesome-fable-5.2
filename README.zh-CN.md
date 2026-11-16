@@ -16,6 +16,16 @@
 - 说明、质检结果和已知不足：[English](deep-dive/README.md) | [中文](deep-dive/README.zh-CN.md)
 - 需要：macOS + Apple Silicon（Metal）、clang++、Python 3（numpy / scipy / Pillow）、ffmpeg
 
+### [Cat Garden · 猫眼植物园](cat-garden/)
+
+[![Cat Garden](cat-garden/preview.jpg)](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/cat-garden-v1.0/cat_garden.mp4)
+
+110 秒、一镜到底的猫第一视角短片（1920×1080，30 fps，带合成音轨）：猫从栅栏下钻进植物园，盯瓢虫、遇熊蜂、在锦鲤池边喝水、在温室里被仙人掌扎到、追蝴蝶，最后跳上石墙晒太阳。自写的 Metal 计算内核路径追踪器，自建 BVH，约 38 万个实例化的植物；头部运动由步态和注视弹簧模拟；numpy/scipy 合成的声音。
+
+- 成片：[cat_garden.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/cat-garden-v1.0/cat_garden.mp4)（304 MB，Release 附件）
+- 说明、质检结果和已知不足：[English](cat-garden/README.md) | [中文](cat-garden/README.zh-CN.md)
+- 需要：macOS + Apple Silicon（Metal）、clang++、Python 3（numpy / scipy / Pillow）、ffmpeg
+
 ### [Afternoon Light · 午后](afternoon-light/)
 
 [![Afternoon Light](afternoon-light/preview.jpg)](afternoon-light/afternoon_light.png)

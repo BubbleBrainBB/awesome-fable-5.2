@@ -1,0 +1,11 @@
+duration 110.000 s, 48000 Hz stereo
+integrated loudness -19.6 LUFS, range 10.6 LU, true peak -2.1 dBFS
+sample peak 0.780 (-2.2 dBFS), samples >= 0.999: 0
+L/R correlation 0.76
+level per 5 s (dBFS rms):
+-26 -28 -24 -25 -29 -16 -27 -25 -29 -25 -32 -27 -26 -30 -34 -29 -29 -30 -28 -30 -25 -23
+footsteps on gravel/leaves: 38 events, median onset rise 3.5 dB (positive = sound starts at the step time)
+splash at 58.72 s: +23.1 dB over the preceding 0.2 s
+land at 98.26 s: +10.3 dB over the preceding 0.2 s
+pounce at 89.35 s: +11.1 dB over the preceding 0.2 s
+prick at 84.00 s: +1.3 dB over the preceding 0.2 s

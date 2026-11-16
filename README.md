@@ -16,6 +16,16 @@ A 78-second first-person dive film (1920×1080, 30 fps, with a synthesised sound
 - Details, QC results and known shortcomings: [English](deep-dive/README.md) | [中文](deep-dive/README.zh-CN.md)
 - Requires: macOS on Apple Silicon (Metal), clang++, Python 3 (numpy, scipy, Pillow), ffmpeg
 
+### [Cat Garden](cat-garden/)
+
+[![Cat Garden](cat-garden/preview.jpg)](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/cat-garden-v1.0/cat_garden.mp4)
+
+A 110-second single-shot film seen through a cat's eyes (1920×1080, 30 fps, with a synthesised soundtrack). The cat squeezes under a fence into a botanical garden, stares at a ladybird, meets a bumblebee, drinks at a koi pond, gets pricked by a cactus in the greenhouse, chases a butterfly, and ends up on a stone wall in the sun. The renderer is a path tracer written for this film in one Metal compute kernel, with its own BVH and about 380,000 instanced plants; the head motion is simulated from gait and gaze springs. The sound is synthesised with numpy and scipy.
+
+- Film: [cat_garden.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/cat-garden-v1.0/cat_garden.mp4) (304 MB, attached to a release)
+- Details, QC results and known shortcomings: [English](cat-garden/README.md) | [中文](cat-garden/README.zh-CN.md)
+- Requires: macOS on Apple Silicon (Metal), clang++, Python 3 (numpy, scipy, Pillow), ffmpeg
+
 ### [Afternoon Light](afternoon-light/)
 
 [![Afternoon Light](afternoon-light/preview.jpg)](afternoon-light/afternoon_light.png)
