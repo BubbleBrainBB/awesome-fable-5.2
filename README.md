@@ -2,7 +2,7 @@
 
 English | [中文](README.zh-CN.md)
 
-A collection of pictures and films computed entirely by code. The code for each work was written by Claude, an AI model (`claude-fable-5-2`), in Claude Code; the picture and the sound were computed by that code. No image or video generation model, no photos, textures, 3D models or sound assets, and no Blender, game engine or off-the-shelf renderer were used.
+A collection of pictures and films computed entirely by code. The code for each work was written by Claude, an AI model (`claude-fable-5-2`), in Claude Code; the picture and the sound were computed by that code. No image or video generation model, no photos, textures, 3D models or sound assets, and no Blender, game engine or off-the-shelf renderer were used. The one exception is stated where it applies: the English narration in Mountain Hike comes from a text-to-speech service.
 
 ## Works
 
@@ -25,6 +25,16 @@ A 110-second single-shot film seen through a cat's eyes (1920×1080, 30 fps, wit
 - Film: [cat_garden.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/cat-garden-v1.0/cat_garden.mp4) (304 MB, attached to a release)
 - Details, QC results and known shortcomings: [English](cat-garden/README.md) | [中文](cat-garden/README.zh-CN.md)
 - Requires: macOS on Apple Silicon (Metal), clang++, Python 3 (numpy, scipy, Pillow), ffmpeg
+
+### [Mountain Hike](mountain-hike/)
+
+[![Mountain Hike](mountain-hike/preview.jpg)](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/mountain-hike-v1.0/mountain_hike.mp4)
+
+A 95-second first-person hiking film in eight shots (1920×1080, 30 fps, with synthesised music and ambience and an English narration). It follows one trail from spruce forest at 1600 m over a footbridge, through misty woods and a treeline of golden larches, across a meadow, a saddle and a snow-dusted ridge, to a 2488 m summit above a sea of cloud at sunset. The renderer is a path tracer written for this film in a Metal compute shader, with height-field ray marching, its own BVH for up to 460,000 instanced trees, plants and rocks, a physical sky, and terrain grown by a landscape-evolution model. The music and ambience are synthesised with numpy and scipy; the seven lines of narration are the one thing not computed by this code (they come from `edge-tts`, an online text-to-speech service).
+
+- Film: [mountain_hike.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/mountain-hike-v1.0/mountain_hike.mp4) (384 MB, attached to a release)
+- Details, QC results and known shortcomings: [English](mountain-hike/README.md) | [中文](mountain-hike/README.zh-CN.md)
+- Requires: macOS on Apple Silicon (Metal), clang++, Python 3 (numpy, scipy, Pillow), ffmpeg; the narration step needs the network
 
 ### [Afternoon Light](afternoon-light/)
 

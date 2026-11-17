@@ -1,0 +1,8 @@
+video: h264 High yuv420p 1920x1080 30/1 frames 2850
+audio: aac 48000 Hz 2 ch;  duration 95.000000 s;  size 383.663818 MB
+decoded 2850 frames; decoder messages: none
+black frames (outside fades): []
+frozen frames: []
+block jumps not at cuts (frame, jump, local median): []
+cut frames: [360, 690, 1020, 1350, 1620, 1950, 2250]  mean luma per shot: [38.1, 71.7, 31.1, 62.0, 68.4, 59.3, 116.6, 79.0]
+SPEC OK

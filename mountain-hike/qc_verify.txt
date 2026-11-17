@@ -1,0 +1,2 @@
+verified 95 frames against independent 480x270 re-renders; worst block difference 8.2 of 255 (threshold 16)
+flagged: []
