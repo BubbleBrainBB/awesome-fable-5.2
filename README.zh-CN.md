@@ -2,7 +2,7 @@
 
 [English](README.md) | 中文
 
-用纯代码做出来的画面和影片合集。每个作品的代码都由 Claude（模型 `claude-fable-5-2`）在 Claude Code 里编写，画面和声音由这些代码计算得出：没有用 AI 生图/生视频模型，没有照片、贴图、3D 模型或音效素材，也没有用 Blender、游戏引擎或现成渲染器。唯一的例外写在对应作品里：《山行》的英文旁白来自语音合成服务。
+用纯代码做出来的画面和影片合集。每个作品的代码都由 Claude（模型 `claude-fable-5-2`）在 Claude Code 里编写，画面和声音由这些代码计算得出：没有用 AI 生图/生视频模型，没有照片、贴图、3D 模型或音效素材，也没有用 Blender、游戏引擎或现成渲染器。唯一的例外写在对应作品里：《山行》和《采蜜》的英文旁白来自语音合成服务。
 
 ## 作品
 
@@ -34,6 +34,16 @@
 
 - 成片：[mountain_hike.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/mountain-hike-v1.0/mountain_hike.mp4)（384 MB，Release 附件）
 - 说明、质检结果和已知不足：[English](mountain-hike/README.md) | [中文](mountain-hike/README.zh-CN.md)
+- 需要：macOS + Apple Silicon（Metal）、clang++、Python 3（numpy / scipy / Pillow）、ffmpeg；旁白一步需要联网
+
+### [Bee Documentary · 采蜜](bee-documentary/)
+
+[![Bee Documentary](bee-documentary/preview.jpg)](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/bee-documentary-v1.0/bee_documentary.mp4)
+
+75 秒、10 个镜头的蜜蜂微距纪录短片（1920×1080，24 fps，带合成的环境声和配乐、英文旁白和软字幕轨）：一只工蜂以慢动作飞到粉色波斯菊上，落花、在花盘上行走、伸出喙探蜜，特写一直近到羽状毛上的花粉粒，然后梳理、把花粉装进后足的花粉篮、起飞。自写的 Metal 计算内核光线追踪器，自建两级 BVH：蜜蜂是代码生成的约 60 个刚体部件、最多 11.7 万根毛，由带腿部反向运动学的骨架驱动；景深和运动模糊都是逐条光线采样出来的。环境声、翅声和配乐由 numpy/scipy 合成；10 句旁白是唯一不由这些代码计算的部分（来自联网的语音合成服务 `edge-tts`）。
+
+- 成片：[bee_documentary.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/bee-documentary-v1.0/bee_documentary.mp4)（220 MB，Release 附件）
+- 说明、质检结果和已知不足：[English](bee-documentary/README.md) | [中文](bee-documentary/README.zh-CN.md)
 - 需要：macOS + Apple Silicon（Metal）、clang++、Python 3（numpy / scipy / Pillow）、ffmpeg；旁白一步需要联网
 
 ### [Afternoon Light · 午后](afternoon-light/)

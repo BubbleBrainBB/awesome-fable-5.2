@@ -1,0 +1,26 @@
+integrated loudness (own BS.1770 meter): -16.00 LUFS
+true peak (4x oversampled): -2.56 dBTP
+duration: 75.250 s, 48000 Hz stereo
+layer loudness before final gain: narration -20.2 LUFS, ambience -30.5, music -29.7, bee/foley -26.8
+during speech: narration -23.1 dB RMS, everything else -35.7 dB RMS  -> voice is 12.5 dB above the bed
+between lines: everything else -27.9 dB RMS
+  line 1 (shot 1): voice -23.4 dB, bed -33.6 dB, margin 10.1 dB
+  line 2 (shot 2): voice -23.4 dB, bed -33.2 dB, margin 9.8 dB
+  line 3 (shot 3): voice -23.7 dB, bed -33.6 dB, margin 10.0 dB
+  line 4 (shot 4): voice -23.0 dB, bed -34.3 dB, margin 11.3 dB
+  line 5 (shot 5): voice -23.7 dB, bed -34.1 dB, margin 10.4 dB
+  line 6 (shot 6): voice -24.1 dB, bed -34.4 dB, margin 10.3 dB
+  line 7 (shot 7): voice -22.8 dB, bed -37.0 dB, margin 14.3 dB
+  line 8 (shot 8): voice -23.6 dB, bed -35.2 dB, margin 11.6 dB
+  line 9 (shot 9): voice -24.4 dB, bed -33.0 dB, margin 8.6 dB
+  line 10 (shot 10): voice -22.4 dB, bed -35.1 dB, margin 12.7 dB
+line 1: voice   1.63-  6.97 s  shot 1 [  0.00,  8.00]  inside shot  margin to next cut 1.03 s
+line 2: voice   8.73- 13.61 s  shot 2 [  8.00, 15.00]  inside shot  margin to next cut 1.39 s
+line 3: voice  15.53- 20.18 s  shot 3 [ 15.00, 21.25]  inside shot  margin to next cut 1.07 s
+line 4: voice  22.03- 28.48 s  shot 4 [ 21.25, 30.25]  inside shot  margin to next cut 1.77 s
+line 5: voice  31.03- 37.75 s  shot 5 [ 30.25, 39.25]  inside shot  margin to next cut 1.50 s
+line 6: voice  40.03- 45.82 s  shot 6 [ 39.25, 47.25]  inside shot  margin to next cut 1.43 s
+line 7: voice  48.03- 52.59 s  shot 7 [ 47.25, 55.25]  inside shot  margin to next cut 2.66 s
+line 8: voice  55.93- 60.98 s  shot 8 [ 55.25, 62.25]  inside shot  margin to next cut 1.27 s
+line 9: voice  62.83- 67.54 s  shot 9 [ 62.25, 68.25]  inside shot  margin to next cut 0.71 s
+line 10: voice  68.93- 73.40 s  shot 10 [ 68.25, 75.25]  inside shot  margin to next cut 1.85 s
