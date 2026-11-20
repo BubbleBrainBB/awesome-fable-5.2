@@ -2,7 +2,7 @@
 
 English | [中文](README.zh-CN.md)
 
-A collection of pictures and films computed entirely by code. The code for each work was written by Claude, an AI model (`claude-fable-5-2`), in Claude Code; the picture and the sound were computed by that code. No image or video generation model, no photos, textures, 3D models or sound assets, and no Blender, game engine or off-the-shelf renderer were used. The one exception is stated where it applies: the English narration in Mountain Hike and in Bee Documentary comes from a text-to-speech service.
+A collection of pictures and films computed entirely by code. The code for each work was written by Claude, an AI model (`claude-fable-5-2`), in Claude Code; the picture and the sound were computed by that code. No image or video generation model, no photos, textures, 3D models or sound assets, and no Blender, game engine or off-the-shelf renderer were used. The one exception is stated where it applies: the narration in Mountain Hike, Bee Documentary and Spring Awakening comes from text-to-speech services.
 
 ## Works
 
@@ -44,6 +44,16 @@ A 75-second macro documentary short in ten shots (1920×1080, 24 fps, with synth
 
 - Film: [bee_documentary.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/bee-documentary-v1.0/bee_documentary.mp4) (220 MB, attached to a release)
 - Details, QC results and known shortcomings: [English](bee-documentary/README.md) | [中文](bee-documentary/README.zh-CN.md)
+- Requires: macOS on Apple Silicon (Metal), clang++, Python 3 (numpy, scipy, Pillow), ffmpeg; the narration step needs the network
+
+### [Spring Awakening](spring-awakening/)
+
+[![Spring Awakening](spring-awakening/preview.jpg)](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/spring-awakening-v1.0/spring_awakening_v2.mp4)
+
+A 93-second nature short in thirteen shots (1920×1080, 24 fps, with synthesised ambience, birdsong and music, a narration and a soft-subtitle track). A snow-covered woodland thaws into a spring meadow: icicles drip, the snow draws back, crocuses open, a seed breaks the soil, a fern unrolls, beech buds split, a ladybird climbs a grass stem and flies, rain falls on the new leaves, and a snail sets out. The renderer is a path tracer written for this film in one Metal compute kernel, with its own two-level BVH, an analytic bokeh layer for small bright points and a separately blurred fog buffer for the light shafts; the plants, the ladybird and the snail are generated and animated by code. The ambience, birdsong and music are synthesised with numpy and scipy; the twelve lines of narration are the one thing not computed by this code. There are two editions with the same picture: English (from `edge-tts`) and Taiwanese Mandarin (from Seed Audio), both online text-to-speech services.
+
+- Film: [spring_awakening_v2.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/spring-awakening-v1.0/spring_awakening_v2.mp4) (English) and [spring_awakening_v2_zh_tw.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/spring-awakening-v1.0/spring_awakening_v2_zh_tw.mp4) (Taiwanese Mandarin), 388 MB each, attached to a release
+- Details, QC results and known shortcomings: [English](spring-awakening/README.md) | [中文](spring-awakening/README.zh-CN.md)
 - Requires: macOS on Apple Silicon (Metal), clang++, Python 3 (numpy, scipy, Pillow), ffmpeg; the narration step needs the network
 
 ### [Afternoon Light](afternoon-light/)

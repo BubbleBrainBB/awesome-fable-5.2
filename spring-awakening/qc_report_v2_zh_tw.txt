@@ -1,0 +1,126 @@
+== 1. streams (ffprobe) ==
+video: h264 profile High 1920x1080 yuv420p r_frame_rate 24/1 frames 2232 (expected 2232)
+audio: aac 48000 Hz channels 2 | subtitles: ['mov_text']
+duration 93.000 s (expected 93.000), size 387.5 MB, bitrate 33.33 Mbps
+stream checks: PASS
+
+== 2. full decode ==
+decode errors: none
+
+== 3. frames ==
+decoded 2232 frames; mean luma min 0.0 max 169.5
+black frames outside the fades: 0 []
+frozen frames (mean abs diff < 0.2 on the proxy): 0 []
+single-frame tile glitches (tile differs >30 from both neighbours which agree within 8): 1 [(1608, 1)]
+inter-frame difference per shot (median / max, proxy luma levels):
+  winter    frames    0- 179  median  0.84  max  5.96
+  icicles   frames  180- 323  median  1.00  max  1.63
+  drop      frames  324- 431  median  0.49  max  1.46
+  thaw      frames  432- 599  median  1.67  max  4.71
+  crocus    frames  600- 779  median  2.28  max  4.62
+  seedling  frames  780-1007  median  1.39  max  2.51
+  fern      frames 1008-1187  median  3.60  max  6.00
+  bud       frames 1188-1367  median  1.10  max  2.45
+  ladybird  frames 1368-1559  median  1.14  max  1.63
+  takeoff   frames 1560-1655  median  0.70  max  2.44
+  rain      frames 1656-1823  median  2.09  max  3.57
+  snail     frames 1824-1991  median  0.85  max  1.10
+  spring    frames 1992-2231  median  1.42  max  4.24
+
+== 4. audio (decoded from the mp4) ==
+samples 4464640 (93.013 s); integrated loudness -16.03 LUFS (target -16); true peak -2.49 dBTP (limit -1.0); clipped samples 0
+left/right correlation 0.87; silent (< -70 dBFS) stretches longer than 0.5 s inside the film: 0
+mix report (before AAC):
+duration 93.000 s, integrated loudness -16.00 LUFS, true peak -2.48 dBTP, sample peak -2.60 dBFS
+  stem ambience   rms  -30.8 dBFS (before ducking/mastering)
+  stem birds      rms  -32.3 dBFS (before ducking/mastering)
+  stem music      rms  -34.5 dBFS (before ducking/mastering)
+  stem narration  rms  -24.9 dBFS (before ducking/mastering)
+  shot winter      0.00-  7.50 s  rms  -19.3 dBFS
+  shot icicles     7.50- 13.50 s  rms  -19.1 dBFS
+  shot drop       13.50- 18.00 s  rms  -20.2 dBFS
+  shot thaw       18.00- 25.00 s  rms  -19.1 dBFS
+  shot crocus     25.00- 32.50 s  rms  -20.5 dBFS
+  shot seedling   32.50- 42.00 s  rms  -19.2 dBFS
+  shot fern       42.00- 49.50 s  rms  -19.0 dBFS
+  shot bud        49.50- 57.00 s  rms  -18.4 dBFS
+  shot ladybird   57.00- 65.00 s  rms  -18.6 dBFS
+  shot takeoff    65.00- 69.00 s  rms  -22.9 dBFS
+  shot rain       69.00- 76.00 s  rms  -18.5 dBFS
+  shot snail      76.00- 83.00 s  rms  -19.9 dBFS
+  shot spring     83.00- 93.00 s  rms  -19.5 dBFS
+  line   1.50-  6.66 s in winter    [0.00-7.50] OK  整个冬天，森林都静悄悄的，好像在憋气一样喔。
+  line   8.50- 12.31 s in icicles   [7.50-13.50] OK  直到有一天早上，太阳变得暖暖的。
+  line  13.90- 16.22 s in drop      [13.50-18.00] OK  冰，就开始融化了耶。
+  line  19.10- 24.29 s in thaw      [18.00-25.00] OK  雪一天一天退开，把藏了好久的土地露出来。
+  line  26.30- 31.13 s in crocus    [25.00-32.50] OK  最早的小花才不要等呢，雪还没走，就自己开了。
+  line  33.10- 40.71 s in seedling  [32.50-42.00] OK  泥土下面，种子也感觉到了喔。它把存了好久的力气，全部拿来往上一顶。
+  line  43.30- 48.81 s in fern      [42.00-49.50] OK  蕨类把去年就卷好的叶子，一圈一圈慢慢打开。
+  line  50.50- 55.48 s in bud       [49.50-57.00] OK  去年夏天就准备好的芽裂开了，树枝一下子变绿了耶。
+  line  57.90- 64.19 s in ladybird  [57.00-65.00] OK  睡了一整个冬天的瓢虫也醒来啰，朝着太阳慢慢往上爬。
+  line  70.20- 74.71 s in rain      [69.00-76.00] OK  然后，下雨了。可是已经不冷了喔。
+  line  77.60- 81.45 s in snail     [76.00-83.00] OK  你看，连最慢的小家伙，也出门了呢。
+  line  84.80- 90.11 s in spring    [83.00-93.00] OK  其实呀，它们一直都在，在雪下面，等春天来。
+
+== 5. narration lines vs shots (from narration.srt) ==
+    1.50-  6.66  shot winter      0.00-  7.50  margin in 1.50 s / out 0.84 s  OK
+    8.50- 12.31  shot icicles     7.50- 13.50  margin in 1.00 s / out 1.19 s  OK
+   13.90- 16.23  shot drop       13.50- 18.00  margin in 0.40 s / out 1.77 s  OK
+   19.10- 24.29  shot thaw       18.00- 25.00  margin in 1.10 s / out 0.71 s  OK
+   26.30- 31.13  shot crocus     25.00- 32.50  margin in 1.30 s / out 1.37 s  OK
+   33.10- 40.71  shot seedling   32.50- 42.00  margin in 0.60 s / out 1.29 s  OK
+   43.30- 48.81  shot fern       42.00- 49.50  margin in 1.30 s / out 0.69 s  OK
+   50.50- 55.48  shot bud        49.50- 57.00  margin in 1.00 s / out 1.52 s  OK
+   57.90- 64.19  shot ladybird   57.00- 65.00  margin in 0.90 s / out 0.81 s  OK
+   70.20- 74.71  shot rain       69.00- 76.00  margin in 1.20 s / out 1.29 s  OK
+   77.60- 81.45  shot snail      76.00- 83.00  margin in 1.60 s / out 1.55 s  OK
+   84.80- 90.11  shot spring     83.00- 93.00  margin in 1.80 s / out 2.89 s  OK
+narration engine: seed-audio-1.0 (ByteDance OpenSpeech), one take for all lines (take_e), directed as a soft Taiwanese-Mandarin female narrator
+
+== 6. render logs ==
+  winter     180 frames logged,  40 spp, render   6.89 s/frame (min 5.75, max 8.67), total  20.7 min, retries/errors 0
+  icicles    144 frames logged,  80 spp, render   3.34 s/frame (min 2.87, max 3.69), total   8.0 min, retries/errors 0
+  drop       108 frames logged, 128 spp, render   0.63 s/frame (min 0.47, max 1.53), total   1.1 min, retries/errors 0
+  thaw       168 frames logged,  56 spp, render   6.24 s/frame (min 4.36, max 8.12), total  17.5 min, retries/errors 0
+  crocus     180 frames logged,  56 spp, render   7.36 s/frame (min 5.68, max 9.94), total  22.1 min, retries/errors 0
+  seedling   229 frames logged,  72 spp, render   6.43 s/frame (min 5.53, max 8.54), total  24.5 min, retries/errors 0
+  fern       180 frames logged,  64 spp, render   6.75 s/frame (min 4.93, max 11.25), total  20.3 min, retries/errors 0
+  bud        180 frames logged, 112 spp, render   1.65 s/frame (min 0.89, max 3.77), total   4.9 min, retries/errors 0
+  ladybird   192 frames logged, 112 spp, render   1.65 s/frame (min 1.18, max 2.18), total   5.3 min, retries/errors 0
+  takeoff     96 frames logged, 128 spp, render   1.64 s/frame (min 1.32, max 2.07), total   2.6 min, retries/errors 0
+  rain       168 frames logged,  96 spp, render   2.99 s/frame (min 2.45, max 3.75), total   8.4 min, retries/errors 0
+  snail      168 frames logged,  80 spp, render   4.07 s/frame (min 3.03, max 5.74), total  11.4 min, retries/errors 0
+  spring     240 frames logged,  32 spp, render  17.07 s/frame (min 14.37, max 24.62), total  68.3 min, retries/errors 0
+  sum of GPU render time 215.1 min (every pixel of every frame is checked for the full sample count before a frame is written)
+
+== 7. independent re-render (480x270, 32 spp, no grain) vs the finished film ==
+  winter    frame  60 (film frame   60): block difference median  6.22  95% 10.56  max 15.15  (0-255 luma)
+  winter    frame 120 (film frame  120): block difference median  6.28  95% 10.99  max 16.28  (0-255 luma)
+  icicles   frame  48 (film frame  228): block difference median  3.49  95%  6.06  max  6.81  (0-255 luma)
+  icicles   frame  96 (film frame  276): block difference median  3.98  95%  6.78  max  8.98  (0-255 luma)
+  drop      frame  36 (film frame  360): block difference median  2.77  95%  4.45  max  6.39  (0-255 luma)
+  drop      frame  72 (film frame  396): block difference median  2.81  95%  4.45  max  5.23  (0-255 luma)
+  thaw      frame  56 (film frame  488): block difference median  3.71  95%  6.24  max  7.45  (0-255 luma)
+  thaw      frame 112 (film frame  544): block difference median  4.41  95%  5.60  max  6.47  (0-255 luma)
+  crocus    frame  60 (film frame  660): block difference median  5.55  95%  7.74  max  9.04  (0-255 luma)
+  crocus    frame 120 (film frame  720): block difference median  5.27  95%  8.61  max 10.76  (0-255 luma)
+  seedling  frame  76 (film frame  856): block difference median  5.04  95%  7.13  max  7.78  (0-255 luma)
+  seedling  frame 152 (film frame  932): block difference median  4.65  95%  6.35  max  7.13  (0-255 luma)
+  fern      frame  60 (film frame 1068): block difference median  4.32  95%  7.82  max  8.85  (0-255 luma)
+  fern      frame 120 (film frame 1128): block difference median  5.11  95%  7.40  max  8.02  (0-255 luma)
+  bud       frame  60 (film frame 1248): block difference median  2.20  95%  4.62  max  6.01  (0-255 luma)
+  bud       frame 120 (film frame 1308): block difference median  2.96  95%  5.62  max  7.00  (0-255 luma)
+  ladybird  frame  64 (film frame 1432): block difference median  3.08  95%  4.18  max  6.19  (0-255 luma)
+  ladybird  frame 128 (film frame 1496): block difference median  2.93  95%  3.96  max  5.61  (0-255 luma)
+  takeoff   frame  32 (film frame 1592): block difference median  2.59  95%  3.94  max  5.32  (0-255 luma)
+  takeoff   frame  64 (film frame 1624): block difference median  2.61  95%  3.91  max  6.02  (0-255 luma)
+  rain      frame  56 (film frame 1712): block difference median  4.41  95%  8.21  max  9.42  (0-255 luma)
+  rain      frame 112 (film frame 1768): block difference median  4.65  95%  8.75  max  9.34  (0-255 luma)
+  snail     frame  56 (film frame 1880): block difference median  3.21  95%  5.91  max  7.05  (0-255 luma)
+  snail     frame 112 (film frame 1936): block difference median  3.22  95%  6.00  max  7.25  (0-255 luma)
+  spring    frame  80 (film frame 2072): block difference median  5.71  95% 11.09  max 14.69  (0-255 luma)
+  spring    frame 160 (film frame 2152): block difference median  6.00  95% 10.92  max 13.32  (0-255 luma)
+frames with a block difference above 28: 0 []
+
+== summary ==
+ITEMS TO LOOK AT: tile glitches (inspect)

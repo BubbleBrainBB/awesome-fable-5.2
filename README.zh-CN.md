@@ -2,7 +2,7 @@
 
 [English](README.md) | 中文
 
-用纯代码做出来的画面和影片合集。每个作品的代码都由 Claude（模型 `claude-fable-5-2`）在 Claude Code 里编写，画面和声音由这些代码计算得出：没有用 AI 生图/生视频模型，没有照片、贴图、3D 模型或音效素材，也没有用 Blender、游戏引擎或现成渲染器。唯一的例外写在对应作品里：《山行》和《采蜜》的英文旁白来自语音合成服务。
+用纯代码做出来的画面和影片合集。每个作品的代码都由 Claude（模型 `claude-fable-5-2`）在 Claude Code 里编写，画面和声音由这些代码计算得出：没有用 AI 生图/生视频模型，没有照片、贴图、3D 模型或音效素材，也没有用 Blender、游戏引擎或现成渲染器。唯一的例外写在对应作品里：《山行》《采蜜》和《万物生》的旁白来自语音合成服务。
 
 ## 作品
 
@@ -44,6 +44,16 @@
 
 - 成片：[bee_documentary.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/bee-documentary-v1.0/bee_documentary.mp4)（220 MB，Release 附件）
 - 说明、质检结果和已知不足：[English](bee-documentary/README.md) | [中文](bee-documentary/README.zh-CN.md)
+- 需要：macOS + Apple Silicon（Metal）、clang++、Python 3（numpy / scipy / Pillow）、ffmpeg；旁白一步需要联网
+
+### [Spring Awakening · 万物生](spring-awakening/)
+
+[![Spring Awakening](spring-awakening/preview.jpg)](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/spring-awakening-v1.0/spring_awakening_v2.mp4)
+
+93 秒、13 个镜头的自然短片（1920×1080，24 fps，带合成的环境声、鸟鸣和配乐、旁白和软字幕轨）：积雪的冬日林地化成春日草地，冰凌滴水、积雪退去、番红花开放、种子破土、蕨展开、山毛榉的芽裂开、瓢虫爬上草茎起飞、春雨落在新叶上、蜗牛出门。自写的 Metal 计算内核路径追踪器，自建两级 BVH，小亮点用解析的散景光斑层，光柱用单独模糊的雾缓冲区；植物、瓢虫和蜗牛都由代码生成并驱动。环境声、鸟鸣和配乐由 numpy/scipy 合成；12 句旁白是唯一不由这些代码计算的部分。同一画面有两个版本：英文版（`edge-tts`）和台湾腔中文版（Seed Audio），都来自联网的语音合成服务。
+
+- 成片：[spring_awakening_v2.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/spring-awakening-v1.0/spring_awakening_v2.mp4)（英文）、[spring_awakening_v2_zh_tw.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/spring-awakening-v1.0/spring_awakening_v2_zh_tw.mp4)（台湾腔中文），各 388 MB，Release 附件
+- 说明、质检结果和已知不足：[English](spring-awakening/README.md) | [中文](spring-awakening/README.zh-CN.md)
 - 需要：macOS + Apple Silicon（Metal）、clang++、Python 3（numpy / scipy / Pillow）、ffmpeg；旁白一步需要联网
 
 ### [Afternoon Light · 午后](afternoon-light/)
