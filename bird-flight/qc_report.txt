@@ -1,0 +1,93 @@
+file: bird_flight.mp4
+decoded frames: 6189 (container says 6189), fps 60.000, duration 103.150 s
+black frames (mean<4, outside fades): 0 []
+frozen frames (mean abs diff to previous < 0.02/255, outside fades): 0 []
+smallest frame-to-frame difference in the body: 0.036 at frame 5866
+luminance jumps (|d mean|>6/255 between consecutive frames, outside fades): 6 [(5409, 6.5), (5410, 6.4), (5411, 7.0), (5518, 8.6), (5519, 12.2), (5620, 10.9)]
+largest luminance step in the body: 12.21 at frame 5519 (t=91.98 s)
+lost-tile signature (block ~black while both temporal neighbours are not): 0 frames []
+single-frame outlier blocks (>=3 blocks deviating >30/255 from both neighbours): 2 frames [(382, 3, 59.5), (448, 3, 74.0)]
+temporal flicker index (mean |2nd difference| of 30px-block luma): median 0.478, p95 2.449, p99 8.731, max 42.999 at frame 5518
+highest-flicker frames: [(5518, 43.0), (5517, 41.88), (448, 36.26), (381, 36.2), (5410, 35.88), (5409, 34.74), (447, 34.61), (380, 33.49), (5619, 32.26), (446, 29.98), (382, 29.37), (5516, 28.05)]
+per-10s: mean luma / mean frame diff / flicker
+    0- 10 s:  132.0   2.81  1.213
+   10- 20 s:   98.2   3.01  0.331
+   20- 30 s:   95.0   4.63  0.860
+   30- 40 s:   95.3   5.25  0.671
+   40- 50 s:   81.7  12.39  1.800
+   50- 60 s:   67.4   8.71  1.522
+   60- 70 s:   79.7   4.24  0.969
+   70- 80 s:   97.9   4.81  0.900
+   80- 90 s:   95.2   4.31  0.619
+   90-100 s:  101.2   1.53  1.098
+  100-110 s:   75.9   0.68  0.216
+of the 15 flagged frames above, 15 lie within 4 frames of a scripted saccade (fast gaze shift); not explained by a saccade: []
+
+---- 抽帧独立重渲比对（src/verify.py）----
+independent low-res re-render check: 103 frames (every 60), 480x270, 8 spp
+worst block difference: 42.8/255 at frame 4590
+median of per-frame worst block: 12.9; mean block difference overall: 4.43
+frames with worst block > 24: [(4590, np.float64(42.8)), (5190, np.float64(25.5))]
+超过 24 的两帧（4590、5190）与旧版超标的是同样两帧、数值相近（旧版 43.1 / 26.9）；旧版当时并排看过，差异来自泛光和水面高光随分辨率的变化。本轮没有重新并排看这两帧。
+
+---- 完整解码与封装参数 ----
+ffmpeg -v error -i bird_flight.mp4 -f null - ：无任何错误输出，退出码 0
+codec_name=h264
+profile=High
+width=1920
+height=1080
+pix_fmt=yuv420p
+color_space=bt709
+r_frame_rate=60/1
+duration=103.150000
+bit_rate=24878005
+nb_frames=6189
+codec_name=aac
+profile=LC
+sample_rate=48000
+channels=2
+r_frame_rate=0/0
+duration=103.150000
+bit_rate=259543
+nb_frames=4837
+文件大小 324282561 字节
+
+---- 天空接缝复核（本轮新增）----
+结尾定格帧 6000，天空区域 160–340 行平均后第 927 列的相邻列亮度差：旧版关键帧 -1.52/255（两侧为 0），新版关键帧 -0.09（与两侧一致，无台阶）；成片解码后旧版在 925–929 列累计约 -1.8，新版无台阶。
+
+---- 音轨检查（src/audio_check.py，对 work/audio.wav）----
+file work/audio.wav: 4951200 samples, 103.150 s, 48000 Hz, stereo; peak 0.792; samples at full scale: 0
+分段的瞬时响度（400 ms 窗，LUFS）：均值 / 最大
+  云上          0.0 –    9.3 s :  -18.2 /  -13.2
+  穿云         10.6 –   15.6 s :  -14.1 /  -10.8
+  俯冲         15.6 –   23.5 s :  -11.9 /   -9.3
+  湖面         23.5 –   36.5 s :  -16.7 /  -11.6
+  河道         36.5 –   55.0 s :  -16.9 /  -11.6
+  峡谷         55.0 –   65.8 s :  -16.6 /   -9.3
+  瀑布拉起       65.8 –   71.2 s :  -12.7 /   -8.8
+  盘旋         71.2 –   79.7 s :  -23.1 /  -18.2
+  进近         79.7 –   89.2 s :  -22.8 /  -17.3
+  枝头前半       89.2 –   94.7 s :  -22.0 /  -14.5
+  枝头静止       94.7 –  101.2 s :  -24.2 /  -19.7
+各段各频带能量（dB，相对全片该频带均值）: 30-120 / 120-500 / 500-2k / 2k-8k Hz
+  云上         -0.9   -3.2   -6.2    0.9
+  穿云          7.0    6.6    3.2   -0.8
+  俯冲          6.1    5.9    4.1    3.6
+  湖面         -3.0    0.2    4.1   -0.6
+  河道         -6.0   -4.9   -2.7    1.9
+  峡谷         -2.6   -1.6    0.5   -1.5
+  瀑布拉起        2.0    1.4    2.0    3.2
+  盘旋         -4.2   -5.0   -5.2   -7.4
+  进近         -3.4   -4.7   -6.4   -7.6
+  枝头前半       -7.4   -5.8  -14.0   -2.3
+  枝头静止       -5.9   -5.7  -10.7   -7.4
+振翅同步 湖面      : 4–25 Hz 包络互相关峰值在 -4.0 ms，相关系数 0.16
+振翅同步 河道      : 4–25 Hz 包络互相关峰值在 +0.0 ms，相关系数 0.52
+振翅同步 瀑布拉起    : 4–25 Hz 包络互相关峰值在 +0.5 ms，相关系数 0.86
+振翅同步 落枝前刹车   : 4–25 Hz 包络互相关峰值在 +0.5 ms，相关系数 0.98
+落枝：画面事件在 89.150 s，音轨高频瞬态峰在 89.146 s（差 -4 ms），峰值/底噪 = 10.7
+点水：画面事件在 28.100 s，音轨高频瞬态峰在 28.082 s（差 -18 ms），峰值/底噪 = 5.7
+左右声道相关系数：0.24
+成片（AAC 编码后）用 ffmpeg ebur128 复核：积分响度 -16.3 LUFS，真峰值 -1.3 dBFS，LRA 13.3 LU
+
+（音轨 work/audio.wav 本轮未改动，沿用 2026-11-17 的合成结果；新成片 AAC 编码后用 ffmpeg ebur128 复核：真峰值 -1.3 dBFS，LRA 13.3 LU。）

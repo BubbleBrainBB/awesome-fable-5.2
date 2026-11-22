@@ -56,6 +56,16 @@
 - 说明、质检结果和已知不足：[English](spring-awakening/README.md) | [中文](spring-awakening/README.zh-CN.md)
 - 需要：macOS + Apple Silicon（Metal）、clang++、Python 3（numpy / scipy / Pillow）、ffmpeg；旁白一步需要联网
 
+### [Bird Flight · 燕归枝](bird-flight/)
+
+[![Bird Flight](bird-flight/preview.jpg)](bird-flight/)
+
+103 秒、一镜到底的家燕第一视角短片（1920×1080，60 fps，带合成音轨）：从云海之上钻云洞俯冲到湖面，贴水疾飞并点水，逆流钻进林间河道和峡谷，贴着 63 米高的瀑布水帘拉起，在崖顶借上升气流盘旋，最后落在桦树枝头望向日落。自写的 Metal 计算着色器确定性距离场光线步进渲染器，没有蒙特卡洛噪点；地形由河流侵蚀模型"长"出来，物理大气，体积云，树由树干、枝条和叶团构成；航线的坡度由横向加速度算出，头部稳定并以跳视转动；声音由 numpy/scipy 按飞行数据合成。
+
+- 成片：`bird_flight.mp4`（324 MB）不在仓库里，按 `bird-flight/render.sh` 可以重新生成（M4 Max 上约 4.5 小时）
+- 说明、质检结果和已知不足：[English](bird-flight/README.md) | [中文](bird-flight/README.zh-CN.md)
+- 需要：macOS + Apple Silicon（Metal）、clang++、Python 3（numpy / scipy / Pillow）、ffmpeg
+
 ### [Afternoon Light · 午后](afternoon-light/)
 
 [![Afternoon Light](afternoon-light/preview.jpg)](afternoon-light/afternoon_light.png)
