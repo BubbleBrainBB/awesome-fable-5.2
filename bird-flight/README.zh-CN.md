@@ -2,7 +2,7 @@
 
 [English](README.md) | 中文
 
-![燕归枝](preview.jpg)
+[![燕归枝](preview.jpg)](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/bird-flight-v1.0/bird_flight.mp4)
 
 镜头就是一只家燕的眼睛，一个连续长镜头：从云海之上钻云洞俯冲，贴着湖面疾飞并点水，逆流钻进林间河道和峡谷，贴着 63 米高的瀑布水帘拉起，在崖顶借上升气流盘旋，最后落在崖边老桦树的枝头，转几次头，望向日落。
 
@@ -12,7 +12,7 @@
 
 | 项目 | 值 |
 |---|---|
-| 成片 | `bird_flight.mp4`，1920×1080，60 fps，103.15 s（6189 帧），一个长镜头，H.264 High yuv420p（BT.709）+ AAC-LC 48 kHz 立体声；324 MB，约 24.9 Mbps。超过 GitHub 单文件上限，不在仓库里；`./render.sh` 可以重新生成。封面 `preview.jpg` 是第 6000 帧 |
+| 成片 | [`bird_flight.mp4`](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/bird-flight-v1.0/bird_flight.mp4)（超过 GitHub 单文件上限，放在 Release 附件里；封面 `preview.jpg` 是第 6000 帧），1920×1080，60 fps，103.15 s（6189 帧），一个长镜头，H.264 High yuv420p（BT.709）+ AAC-LC 48 kHz 立体声；324 MB，约 24.9 Mbps |
 | 总览图 | [`contact_sheet.jpg`](contact_sheet.jpg)（约每秒一帧，104 格） |
 | 源码 | `src/`（约 3100 行：C++/Objective-C++ 主程序、Metal 着色器、Python 音频与质检） |
 | 一键重建 | `./render.sh`（固定随机种子，分 52 段，可断点续渲；M4 Max 上约 4.5 小时） |

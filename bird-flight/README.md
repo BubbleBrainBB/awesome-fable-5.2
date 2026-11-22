@@ -2,7 +2,7 @@
 
 English | [中文](README.zh-CN.md)
 
-![Bird Flight](preview.jpg)
+[![Bird Flight](preview.jpg)](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/bird-flight-v1.0/bird_flight.mp4)
 
 The camera is a barn swallow's eyes, in one continuous shot. It starts above a sea of cloud, dives through a hole in the cloud, skims a lake and drinks on the wing, flies upstream through a wooded river corridor and a gorge, climbs the face of a 63 m waterfall, circles in the updraught above the cliff, and lands on a twig of an old birch at the cliff edge. It turns its head a few times and looks at the sunset.
 
@@ -12,7 +12,7 @@ The code was written by Claude, an AI model (`claude-fable-5-2`), in Claude Code
 
 | Item | Value |
 |---|---|
-| Film | `bird_flight.mp4`, 1920×1080, 60 fps, 103.15 s (6189 frames), one continuous shot, H.264 High yuv420p (BT.709) + AAC-LC 48 kHz stereo; 324 MB, about 24.9 Mbps. It is above GitHub's per-file limit and is not in the repository; `./render.sh` regenerates it. The cover `preview.jpg` is frame 6000 |
+| Film | [`bird_flight.mp4`](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/bird-flight-v1.0/bird_flight.mp4) (above GitHub's per-file limit, so it is attached to a release; the cover `preview.jpg` is frame 6000), 1920×1080, 60 fps, 103.15 s (6189 frames), one continuous shot, H.264 High yuv420p (BT.709) + AAC-LC 48 kHz stereo; 324 MB, about 24.9 Mbps |
 | Contact sheet | [`contact_sheet.jpg`](contact_sheet.jpg) (about one frame per second, 104 cells) |
 | Source | `src/` (about 3100 lines: C++/Objective-C++ host, Metal shaders, Python audio and QC) |
 | One-command rebuild | `./render.sh` (fixed random seeds, 52 segments, resumable; about 4.5 hours on an M4 Max) |

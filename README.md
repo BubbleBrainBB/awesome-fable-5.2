@@ -58,11 +58,11 @@ A 93-second nature short in thirteen shots (1920×1080, 24 fps, with synthesised
 
 ### [Bird Flight](bird-flight/)
 
-[![Bird Flight](bird-flight/preview.jpg)](bird-flight/)
+[![Bird Flight](bird-flight/preview.jpg)](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/bird-flight-v1.0/bird_flight.mp4)
 
 A 103-second single-shot film seen through a barn swallow's eyes (1920×1080, 60 fps, with a synthesised soundtrack). The swallow leaves a sea of cloud through a hole in it, dives to a lake, skims the water and drinks on the wing, flies up a wooded river corridor and a gorge, climbs the face of a 63 m waterfall, circles in the updraught above the cliff, and lands on a birch twig to look at the sunset. The renderer is a deterministic distance-field ray marcher written for this film in Metal compute shaders, with no Monte Carlo noise, terrain grown by a river-erosion model, a physical atmosphere, volumetric cloud and trees built from trunks, branches and foliage clumps; the flight path banks from its own lateral acceleration and the head is stabilised and moves in saccades. The sound is synthesised with numpy and scipy from the flight data.
 
-- Film: `bird_flight.mp4` (324 MB) is not in the repository; `bird-flight/render.sh` regenerates it (about 4.5 hours on an M4 Max)
+- Film: [bird_flight.mp4](https://github.com/BubbleBrainBB/awesome-fable-5.2/releases/download/bird-flight-v1.0/bird_flight.mp4) (324 MB, attached to a release)
 - Details, QC results and known shortcomings: [English](bird-flight/README.md) | [中文](bird-flight/README.zh-CN.md)
 - Requires: macOS on Apple Silicon (Metal), clang++, Python 3 (numpy, scipy, Pillow), ffmpeg
 
